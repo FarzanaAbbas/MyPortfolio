@@ -1,8 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
+  output: 'export',        // ✅ generate static HTML for all pages
+  trailingSlash: true,     // optional, helps with static routing
 };
 
 export default nextConfig;
