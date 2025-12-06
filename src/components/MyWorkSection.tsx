@@ -44,17 +44,17 @@ interface ProjectData {
 
 // 3. Type for ProjectStrip Component Props
 interface ProjectStripProps {
-    project: ProjectData;
-    index: number;
-    activeIndex: number | null;
-    setActiveIndex: (index: number | null) => void;
+  project: ProjectData;
+  index: number;
+  activeIndex: number | null;
+  setActiveIndex: (index: number | null) => void;
 }
 
 // 4. Type for MobileMenu Component Props
 interface MobileMenuProps {
-    isOpen: boolean;
-    onClose: () => void;
-    navLinks: LinkData[];
+  isOpen: boolean;
+  onClose: () => void;
+  navLinks: LinkData[];
 }
 
 
@@ -113,7 +113,7 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
     <motion.div
       // MODIFIED CLASS: Default width is w-full (mobile stack). Desktop sizing remains.
       className={`relative w-full h-[350px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
-      ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`} 
+      ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
       onMouseEnter={() => setActiveIndex(index)}
     >
       {/* Check if video exists before rendering */}
@@ -176,83 +176,94 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
 // navLinks array is now strongly typed
 const navLinks: LinkData[] = [
   { name: 'About', href: '/' },
-  { name: 'My Works', href: '/mywork' }, 
+  { name: 'My Works', href: '/mywork' },
   { name: '[AI]', href: '/ai' },
 ];
 
 // --- MOBILE MENU COMPONENT ---
 // Props are now strongly typed
-const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) => { 
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    initial={{ x: '100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ type: 'tween', duration: 0.3 }}
-                    className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col p-6 pt-6"
-                    style={{ color: CUSTOM_COLOR }}
-                >
-                    {/* Explicit CLOSE BUTTON (The X Mark - FiX) */}
-                    <div className="flex justify-end mb-10"> 
-                        <button
-                            onClick={onClose}
-                            className="text-3xl hover:opacity-70 transition-opacity"
-                        >
-                            <FiX /> 
-                        </button>
-                    </div>
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'tween', duration: 0.3 }}
+          className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col p-6 pt-6"
+          style={{ color: CUSTOM_COLOR }}
+        >
+          {/* Explicit CLOSE BUTTON (The X Mark - FiX) */}
+          <div className="flex justify-end mb-10">
+            <button
+              onClick={onClose}
+              className="text-3xl hover:opacity-70 transition-opacity"
+            >
+              <FiX />
+            </button>
+          </div>
 
-                    <div className="flex flex-col gap-4"> 
-                        {/* Link parameter is now correctly typed as LinkData */}
-                        {navLinks.map((link: LinkData) => (
-                            <motion.a
-                                key={link.name}
-                                href={link.href}
-                                onClick={onClose}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.1 }}
-                                className="bg-[#0a0a0a] text-3xl font-extrabold uppercase tracking-widest border-b border-white/10 pb-3 hover:opacity-80 transition-opacity" 
-                                style={{ color: CUSTOM_COLOR }}
-                            >
-                                {link.name}
-                            </motion.a>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
-        </AnimatePresence>
-    );
+          <div className="flex flex-col gap-4">
+            {/* Link parameter is now correctly typed as LinkData */}
+            {navLinks.map((link: LinkData) => (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                onClick={onClose}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-[#0a0a0a] text-3xl font-extrabold uppercase tracking-widest border-b border-white/10 pb-3 hover:opacity-80 transition-opacity"
+                style={{ color: CUSTOM_COLOR }}
+              >
+                {link.name}
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 
 // MAIN PAGE COMPONENT
 export default function MyWorkPage() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  
+
   // Ref types are now correctly defined for HTMLDivElement
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  
+
   const [dragConstraint, setDragConstraint] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  
+  // --- UPDATED LOADING STATE TO TRUE ---
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // @ts-ignore
-  const router = useRouter(); 
+  const router = useRouter();
+
+  // --- ADDED PRELOADER TIMER ---
+  useEffect(() => {
+    // Simulate loading time (adjust ms as needed)
+    const timer = setTimeout(() => {
+        setIsLoading(false);
+    }, 2500); 
+    return () => clearTimeout(timer);
+  }, []);
 
   const updateConstraints = () => {
     // Explicitly cast ref.current to HTMLDivElement to access properties like scrollWidth/offsetWidth
     const container = containerRef.current as HTMLDivElement | null;
     const track = trackRef.current as HTMLDivElement | null;
-    
+
     if (!container || !track) return;
 
     // TypeScript now knows scrollWidth and offsetWidth exist on track/container
-    const scrollWidth = track.scrollWidth; 
+    const scrollWidth = track.scrollWidth;
     const offsetWidth = container.offsetWidth;
 
     // KEY CHANGE: Drag only works if the content is wider than the container.
@@ -274,50 +285,215 @@ export default function MyWorkPage() {
   }, [activeIndex]);
 
   return (
-     <div className="min-h-screen flex flex-col bg-black">
-    <motion.div className="min-h-screen bg-black pt-32 pb-10 px-6 md:px-12 flex items-center relative">
-        <GlowCursor/>
-      {/* --- FIX END --- */}
-      <Head>
-        <title>Farzana Abbas</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+    <div className="min-h-screen flex flex-col bg-black">
+      
+      {/* --- ADDED PRELOADER HERE --- */}
+      <AnimatePresence mode="wait">
+        {isLoading && (
+            <motion.div
+                key="preloader"
+                exit={{ y: -1000, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+                className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0a0a0a]"
+            >
+                {/* ROBOT CSS STYLES */}
+                <style jsx>{`
+                .robot-container {
+                    position: relative;
+                    width: 60px;
+                    height: 100px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    animation: bob 0.6s infinite ease-in-out alternate;
+                }
+                .head {
+                    width: 40px;
+                    height: 30px;
+                    border: 2px solid ${CUSTOM_COLOR};
+                    border-radius: 6px;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .antenna {
+                    position: absolute;
+                    top: -12px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 2px;
+                    height: 12px;
+                    background-color: ${CUSTOM_COLOR};
+                }
+                .antenna::after {
+                    content: '';
+                    position: absolute;
+                    top: -4px;
+                    left: -3px;
+                    width: 8px;
+                    height: 8px;
+                    background-color: ${CUSTOM_COLOR};
+                    border-radius: 50%;
+                    animation: blink 1s infinite;
+                }
+                .eye {
+                    width: 6px;
+                    height: 6px;
+                    background-color: ${CUSTOM_COLOR};
+                    border-radius: 50%;
+                }
+                .neck {
+                    width: 10px;
+                    height: 5px;
+                    border-left: 2px solid ${CUSTOM_COLOR};
+                    border-right: 2px solid ${CUSTOM_COLOR};
+                }
+                .body {
+                    width: 50px;
+                    height: 40px;
+                    border: 2px solid ${CUSTOM_COLOR};
+                    border-radius: 8px;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .heart {
+                    font-size: 10px;
+                    opacity: 0.5;
+                    animation: pulse 1s infinite;
+                }
+                .legs-container {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: -2px; /* Connect to body */
+                }
+                .leg {
+                    width: 8px;
+                    height: 25px;
+                    background-color: ${CUSTOM_COLOR};
+                    border-radius: 4px;
+                    transform-origin: top;
+                }
+                .leg.left {
+                    animation: walk 0.6s infinite ease-in-out;
+                }
+                .leg.right {
+                    animation: walk 0.6s infinite ease-in-out reverse;
+                }
+                .shadow {
+                    margin-top: 10px;
+                    width: 50px;
+                    height: 8px;
+                    background-color: ${CUSTOM_COLOR};
+                    border-radius: 50%;
+                    opacity: 0.2;
+                    animation: shadowScale 0.6s infinite ease-in-out alternate;
+                }
+                @keyframes bob {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-5px); }
+                }
+                @keyframes walk {
+                    0% { transform: rotate(15deg); }
+                    100% { transform: rotate(-15deg); }
+                }
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.3; }
+                }
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.2); }
+                    100% { transform: scale(1); }
+                }
+                @keyframes shadowScale {
+                    0% { transform: scale(1); opacity: 0.2; }
+                    100% { transform: scale(0.8); opacity: 0.1; }
+                }
+                `}</style>
+
+                <div className="robot-container">
+                    <div className="antenna"></div>
+                    <div className="head">
+                        <div className="eye"></div>
+                        <div className="eye"></div>
+                    </div>
+                    <div className="neck"></div>
+                    <div className="body">
+                        <span className="heart">❤</span>
+                    </div>
+                    <div className="legs-container">
+                        <div className="leg left"></div>
+                        <div className="leg right"></div>
+                    </div>
+                </div>
+                
+                <div className="shadow"></div>
+
+                <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="mt-8 text-xl font-bold font-mono tracking-widest uppercase opacity-80 animate-pulse"
+                    style={{ color: CUSTOM_COLOR }}
+                >
+                    WAIT BRO
+                </motion.p>
+            </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- MAIN CONTENT WRAPPER --- */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="min-h-screen bg-black pt-32 pb-10 px-6 md:px-12 flex items-center relative"
+      >
+        <GlowCursor />
+        {/* --- FIX END --- */}
+        <Head>
+          <title>Farzana Abbas</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
+        
         {/* --- NAVBAR --- */}
-        {!isLoading && (
-          <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center bg-[#0a0a0a] backdrop-blur-md shadow-lg border-b border-white/10">
+        {/* Removed !isLoading check so navbar appears consistently with content fade-in */}
+        <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center bg-[#0a0a0a] backdrop-blur-md shadow-lg border-b border-white/10">
             <a href="#" className="text-xl font-bold uppercase tracking-widest" style={{ color: CUSTOM_COLOR }}>FA</a>
             <div className="hidden md:flex gap-8">
-              {navLinks.map((link) => (
+                {navLinks.map((link) => (
                 <a
-                  key={link.name}
-                  href={link.href}
-                  className="bg-[#0a0a0a] text-sm font-medium hover:opacity-70 transition-opacity uppercase tracking-widest"
-                  style={{ color: CUSTOM_COLOR }}
+                    key={link.name}
+                    href={link.href}
+                    className="bg-[#0a0a0a] text-sm font-medium hover:opacity-70 transition-opacity uppercase tracking-widest"
+                    style={{ color: CUSTOM_COLOR }}
                 >
-                  {link.name}
+                    {link.name}
                 </a>
-              ))}
+                ))}
             </div>
             {/* MOBILE MENU TOGGLE - DISPLAYS HAMBURGER (FiMenu) or X (FiX) */}
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-2xl"
-              style={{ color: CUSTOM_COLOR }}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden text-2xl"
+                style={{ color: CUSTOM_COLOR }}
             >
-              {isMenuOpen ? <FiX /> : <FiMenu />}
+                {isMenuOpen ? <FiX /> : <FiMenu />}
             </button>
-          </nav>
-        )}
-        
+        </nav>
+
         {/* MOBILE MENU OVERLAY */}
-        <MobileMenu 
-            isOpen={isMenuOpen} 
-            onClose={() => setIsMenuOpen(false)} 
-            navLinks={navLinks} 
+        <MobileMenu
+          isOpen={isMenuOpen}
+          onClose={() => setIsMenuOpen(false)}
+          navLinks={navLinks}
         />
 
         <div className="max-w-[1600px] mx-auto w-full flex flex-col md:flex-row h-full gap-40 md:gap-40">
-          
+
           {/* LEFT TEXT */}
           <div className="md:w-1/4 flex flex-col justify-center items-start z-10">
             <h1 className="text-5xl md:text-7xl font-black mb-6 text-[#e0e0e0]">
@@ -343,7 +519,7 @@ export default function MyWorkPage() {
               ref={trackRef}
               // KEY CHANGE: Mobile (default) is flex-col for stacking. Desktop (md:) is flex-row for dragging.
               className="flex flex-col md:flex-row gap-4 h-auto md:h-[500px] w-full md:w-max px-4 items-center select-none"
-              
+
               // Enable drag only if content is wider (desktop behavior)
               drag="x"
               dragConstraints={{ right: 0, left: -dragConstraint }}
@@ -364,22 +540,22 @@ export default function MyWorkPage() {
             </motion.div>
           </div>
         </div>
-    </motion.div>
-        
-              <footer className="bg-black py-6 px-6 flex flex-col md:flex-row justify-between items-center text-xs font-mono uppercase tracking-widest border-t border-white/10" style={{ color: CUSTOM_COLOR, opacity: 0.6 }}>
-                
-                <div className="flex gap-4 mb-4 md:mb-0 w-full md:w-auto justify-center md:justify-start">
-                  <span>© {new Date().getFullYear()} FarzanaAbbas</span>
-                </div>
-        
-                <div className="marquee-container w-full md:w-1/3 mb-4 md:mb-0 overflow-hidden relative">
-                    <div className="marquee-content whitespace-nowrap">
-                      <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-                      <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-                      <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-                      <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-                    </div>
-                    <style jsx>{`
+      </motion.div>
+
+      <footer className="bg-black py-6 px-6 flex flex-col md:flex-row justify-between items-center text-xs font-mono uppercase tracking-widest border-t border-white/10" style={{ color: CUSTOM_COLOR, opacity: 0.6 }}>
+
+        <div className="flex gap-4 mb-4 md:mb-0 w-full md:w-auto justify-center md:justify-start">
+          <span>© {new Date().getFullYear()} FarzanaAbbas</span>
+        </div>
+
+        <div className="marquee-container w-full md:w-1/3 mb-4 md:mb-0 overflow-hidden relative">
+          <div className="marquee-content whitespace-nowrap">
+            <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+            <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+            <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+            <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+          </div>
+          <style jsx>{`
                       .marquee-container {
                         mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
                       }
@@ -392,30 +568,30 @@ export default function MyWorkPage() {
                         100% { transform: translateX(-100%); }
                       }
                     `}</style>
-                </div>
-        
-                <div className="flex gap-4 text-lg w-full md:w-auto justify-center md:justify-end">
-                <a
-                  href="https://www.linkedin.com/in/khadeejath-farzana-a-350a5228b"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-100 transition-opacity"
-                >
-                  <FaLinkedin/>
-                </a>
-        
-                  <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
-                  <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
-                 <a
-  href="/CV.pdf"  // <--- ADD THE SLASH HERE
-  target="_blank" // <--- ADD THIS to open in new tab
-  rel="noopener noreferrer"
-  className="hover:opacity-100 transition-opacity"
->
-  <FiFileText />
-</a>
-                </div>
-              </footer>
-              </div>
+        </div>
+
+        <div className="flex gap-4 text-lg w-full md:w-auto justify-center md:justify-end">
+          <a
+            href="https://www.linkedin.com/in/khadeejath-farzana-a-350a5228b"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            <FaLinkedin />
+          </a>
+
+          <a href="https://github.com/FarzanaAbbas/" target="_blank" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
+          <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
+          <a
+            href="/CV.pdf"  // <--- ADD THE SLASH HERE
+            target="_blank" // <--- ADD THIS to open in new tab
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            <FiFileText />
+          </a>
+        </div>
+      </footer>
+    </div>
   );
 }

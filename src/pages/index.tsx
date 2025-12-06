@@ -773,7 +773,7 @@ const TypingText: React.FC<TypingTextProps> = ({
           <FaLinkedinIn/>
         </a>
 
-          <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
+          <a href="https://github.com/FarzanaAbbas/" target='_blank' className="hover:opacity-100 transition-opacity"><FaGithub /></a>
           <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
         <a
   href="/CV.pdf"  // <--- ADD THE SLASH HERE
