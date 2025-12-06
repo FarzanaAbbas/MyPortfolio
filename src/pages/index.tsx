@@ -5,11 +5,21 @@ import {
 } from 'react';
 
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useSpring,
   useTransform,
 } from 'framer-motion';
+import Head from 'next/head';
+import {
+  FaGithub,
+  FaInstagram,
+  FaLinkedinIn,
+} from 'react-icons/fa';
+import { FiFileText } from 'react-icons/fi';
+
+import GlowCursor from '@/components/GlowCursor';
 
 // --- CONFIGURATION ---
 const CUSTOM_COLOR = '#FFEFE5'; // Cream/Off-white
@@ -691,7 +701,7 @@ const TypingText: React.FC<TypingTextProps> = ({
           rel="noopener noreferrer"
           className="hover:opacity-100 transition-opacity"
         >
-          <FaLinkedinIn />
+          <FaLinkedinIn/>
         </a>
 
           <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
