@@ -5,21 +5,11 @@ import {
 } from 'react';
 
 import {
-  AnimatePresence,
   motion,
   useMotionValue,
   useSpring,
   useTransform,
 } from 'framer-motion';
-import Head from 'next/head';
-import {
-  FaGithub,
-  FaInstagram,
-  FaLinkedinIn,
-} from 'react-icons/fa';
-import { FiFileText } from 'react-icons/fi';
-
-import GlowCursor from '@/components/GlowCursor';
 
 // --- CONFIGURATION ---
 const CUSTOM_COLOR = '#FFEFE5'; // Cream/Off-white
@@ -159,14 +149,26 @@ export default function Home() {
     { name: 'My Work', href: '/mywork' }, 
     { name: '[AI]', href: '/ai' },
   ];
-const TypingText = ({ text, className, style, delayStart = 0 }) => {
-  // Animation Variants
+interface TypingTextProps {
+  text: string;
+  className?: string;
+  style?: React.CSSProperties;
+  delayStart?: number;
+}
+
+const TypingText: React.FC<TypingTextProps> = ({
+  text,
+  className,
+  style,
+  delayStart = 0,
+}) => {
+  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1, // Speed of typing (lower = faster)
+        staggerChildren: 0.1,
         delayChildren: delayStart,
       },
     },
@@ -174,21 +176,11 @@ const TypingText = ({ text, className, style, delayStart = 0 }) => {
 
   const child = {
     hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3 } // Smoothness of letter appearance
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="visible"
-      className={className}
-      style={style}
-    >
+    <motion.div variants={container} initial="hidden" animate="visible" className={className} style={style}>
       {text.split("").map((letter, index) => (
         <motion.span key={index} variants={child}>
           {letter}
@@ -197,6 +189,8 @@ const TypingText = ({ text, className, style, delayStart = 0 }) => {
     </motion.div>
   );
 };
+
+
   // --- SECTIONS DATA ---
   const sections = [
     {
