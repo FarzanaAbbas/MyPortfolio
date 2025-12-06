@@ -17,16 +17,23 @@ import {
   FaInstagram,
   FaLinkedinIn,
 } from 'react-icons/fa';
-import { FiFileText } from 'react-icons/fi';
+// IMPORT THE HAMBURGER (MENU) ICON
+import {
+  FiFileText,
+  FiMenu,
+  FiX,
+} from 'react-icons/fi';
 
 import GlowCursor from '@/components/GlowCursor';
 
 // --- CONFIGURATION ---
 const CUSTOM_COLOR = '#FFEFE5'; // Cream/Off-white
-const ACCENT_COLOR_LOW_OPACITY = '#FFEFE530'; 
+const ACCENT_COLOR_LOW_OPACITY = '#FFEFE530';
 const EMAIL_ADDRESS = "connectwithfarzaana@gmail.com";
 
 // --- COMPONENTS ---
+
+// ... (SkillTag3D and StickyCard components remain unchanged)
 
 const SkillTag3D = ({ text, index }: { text: string, index: number }) => {
   return (
@@ -88,33 +95,87 @@ const StickyCard = ({ children, title, index, total }: StickyCardProps) => {
                }}
             >
                 <div className="p-8 md:p-12 h-full flex flex-col">
-                      {/* Header */}
-                      <div className="flex justify-between items-baseline mb-8 border-b border-white/10 pb-6">
-                         <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight" style={{ color: CUSTOM_COLOR }}>
-                             {title}
-                         </h2>
-                         <span className="font-mono text-sm opacity-30" style={{ color: CUSTOM_COLOR }}>
-                             0{index + 1} / 0{total}
-                         </span>
-                      </div>
-                      
-                      {/* Content Container */}
-                      <div 
-                         className="flex-1 overflow-y-auto hide-scrollbar"
-                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                      >
-                         <style jsx>{`
-                             .hide-scrollbar::-webkit-scrollbar {
-                                 display: none;
-                             }
-                         `}</style>
-                         {children}
-                      </div>
+                    {/* Header */}
+                    <div className="flex justify-between items-baseline mb-8 border-b border-white/10 pb-6">
+                       <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight" style={{ color: CUSTOM_COLOR }}>
+                            {title}
+                       </h2>
+                       <span className="font-mono text-sm opacity-30" style={{ color: CUSTOM_COLOR }}>
+                            0{index + 1} / 0{total}
+                       </span>
+                    </div>
+                    
+                    {/* Content Container */}
+                    <div 
+                        className="flex-1 overflow-y-auto hide-scrollbar"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        <style jsx>{`
+                            .hide-scrollbar::-webkit-scrollbar {
+                                display: none;
+                            }
+                        `}</style>
+                        {children}
+                    </div>
                 </div>
             </motion.div>
         </div>
     );
 };
+
+// --- NEW MOBILE MENU COMPONENT ---
+
+interface MobileMenuProps {
+    isOpen: boolean;
+    onClose: () => void;
+    navLinks: { name: string, href: string }[];
+}
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) => {
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    initial={{ x: '100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '100%' }}
+                    transition={{ type: 'tween', duration: 0.3 }}
+                    className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col p-6 pt-6" // pt-6 for better spacing
+                    style={{ color: CUSTOM_COLOR }}
+                >
+                    {/* Explicit CLOSE BUTTON (The X Mark) */}
+                    <div className="flex justify-end mb-10"> 
+                        <button
+                            onClick={onClose}
+                            className="text-3xl hover:opacity-70 transition-opacity"
+                        >
+                            <FiX />
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col gap-4"> 
+                        {navLinks.map((link) => (
+                            <motion.a
+                                key={link.name}
+                                href={link.href}
+                                onClick={onClose}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="text-3xl font-extrabold uppercase tracking-widest border-b border-white/10 pb-3 hover:opacity-80 transition-opacity bg-[#0a0a0a]" 
+                                style={{ color: CUSTOM_COLOR }}
+                            >
+                                {link.name}
+                            </motion.a>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+};
+
+// --- MAIN HOME COMPONENT ---
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -156,7 +217,7 @@ export default function Home() {
   // --- NAV LINKS ---
   const navLinks = [
     { name: 'About', href: '#about' },
-    { name: 'My Work', href: '/mywork' }, 
+    { name: 'My Works', href: '/mywork' }, 
     { name: '[AI]', href: '/ai' },
   ];
 interface TypingTextProps {
@@ -211,7 +272,7 @@ const TypingText: React.FC<TypingTextProps> = ({
             Hey there, lovely to meet you! My real name is <span className="font-asimilates text-cokewhite italic text-xl md:text-2xl mx-1" style={{ color: CUSTOM_COLOR }}>Khadeejath Farzana A</span>, and I’m beyond thrilled to share a bit about myself. I’m from Sampaje, and let me tell you, I absolutely adore bringing ideas to life in the digital world. You could say I’m an <span className="font-asimilates italic text-xl md:text-2xl mx-1" style={{ color: CUSTOM_COLOR }}>‘Creative Developer’</span> – someone who genuinely enjoys blending beautiful design with smart development to craft awesome, super easy-to-use online experiences.
           </p>
           <p className="text-base md:text-lg leading-relaxed font-light text-[#cccccc]">
-             But that’s not all! Beyond the code and pixels, I’m a bit of a dreamy girl (always imagining what’s next!), a total foodie, and you’ll often find me being the most hardworking girl in the room when it comes to a project, I’m passionate about. My journey through education truly sparked a dream in me: to keep innovating where creativity meets tech, always aiming to build something special, unique, and truly impactful for users.
+              But that’s not all! Beyond the code and pixels, I’m a bit of a dreamy girl (always imagining what’s next!), a total foodie, and you’ll often find me being the most hardworking girl in the room when it comes to a project, I’m passionate about. My journey through education truly sparked a dream in me: to keep innovating where creativity meets tech, always aiming to build something special, unique, and truly impactful for users.
           </p>
         </div>
       )
@@ -228,7 +289,7 @@ const TypingText: React.FC<TypingTextProps> = ({
                 Manage end-to-end development for client websites and provide technical training to students. Proficient in building dynamic applications using the MERN stack, Next.js, JavaScript, Python, and Flask to ensure robust and scalable solutions.
               </p>
             </div>
-         </div>
+          </div>
       )
     },
     {
@@ -240,7 +301,7 @@ const TypingText: React.FC<TypingTextProps> = ({
               <p className="text-lg opacity-80 mb-2" style={{ color: CUSTOM_COLOR }}>Zephyr Technologies and Solutions Pvt. Ltd, Mangalore</p>
               <p className="text-sm text-gray-500 font-mono mb-4">Sep 2023 — Feb 2024</p>
               <p className="text-gray-400 max-w-2xl">
-                  Completed an intensive Full Stack Development course covering modern web technologies and frameworks.
+                Completed an intensive Full Stack Development course covering modern web technologies and frameworks.
               </p>
             </div>
             <div className="group">
@@ -259,7 +320,7 @@ const TypingText: React.FC<TypingTextProps> = ({
                 Science Stream [PCMB] - Physics, Chemistry, Mathematics, Biology.
               </p>
             </div>
-             <div className="group">
+            <div className="group">
               <h3 className="text-2xl font-bold text-white mb-1">Secondary Education (10th)</h3>
               <p className="text-sm text-gray-500 font-mono mb-4">Passed 2018</p>
             </div>
@@ -276,17 +337,17 @@ const TypingText: React.FC<TypingTextProps> = ({
               className="w-full"
             >
                 <motion.div
-                   ref={skillRef}
-                   onMouseMove={handleMouseMove}
-                   onMouseLeave={handleMouseLeave}
-                   style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                   className="relative p-8 rounded-3xl bg-white/[0.05] border border-white/10 backdrop-blur-sm"
+                    ref={skillRef}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                    className="relative p-8 rounded-3xl bg-white/[0.05] border border-white/10 backdrop-blur-sm"
                 >
                    <div className="flex flex-wrap gap-3">
-                       {skillsList.map((skill, index) => (
-                           <SkillTag3D key={skill} text={skill} index={index} />
-                       ))}
-                   </div>
+                        {skillsList.map((skill, index) => (
+                            <SkillTag3D key={skill} text={skill} index={index} />
+                        ))}
+                    </div>
                 </motion.div>
             </motion.div>
         </div>
@@ -439,9 +500,9 @@ const TypingText: React.FC<TypingTextProps> = ({
               }
 
               @keyframes pulse {
-                 0% { transform: scale(1); }
-                 50% { transform: scale(1.2); }
-                 100% { transform: scale(1); }
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
               }
 
               @keyframes shadowScale {
@@ -481,31 +542,39 @@ const TypingText: React.FC<TypingTextProps> = ({
         )}
       </AnimatePresence>
 
-     {/* Nav */}
+      {/* Nav */}
 {!isLoading && (
-  <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center bg-black/90 backdrop-blur-md shadow-lg border-b border-white/10">
-    <a href="#" className="text-xl font-bold uppercase tracking-widest" style={{ color: CUSTOM_COLOR }}>Farzana.</a>
+  <nav className="bg-[#0a0a0a] fixed w-full z-50 px-6 py-6 flex justify-between items-center">
+    <a href="#" className="text-xl font-bold uppercase tracking-widest" style={{ color: CUSTOM_COLOR }}>FA</a>
     <div className="hidden md:flex gap-8">
       {navLinks.map((link) => (
         <a
           key={link.name}
           href={link.href}
-          className="text-sm font-medium hover:opacity-70 transition-opacity uppercase tracking-widest"
+          className="bg-[#0a0a0a] text-sm font-medium hover:opacity-70 transition-opacity uppercase tracking-widest"
           style={{ color: CUSTOM_COLOR }}
         >
           {link.name}
         </a>
       ))}
     </div>
+    {/* MOBILE MENU TOGGLE - NOW DISPLAYS HAMBURGER OR X ICON */}
     <button
       onClick={() => setIsMenuOpen(!isMenuOpen)}
-      className="md:hidden font-bold"
+      className="md:hidden text-2xl"
       style={{ color: CUSTOM_COLOR }}
     >
-      MENU
+      {isMenuOpen ? <FiX /> : <FiMenu />}
     </button>
   </nav>
 )}
+
+{/* ADD MOBILE MENU COMPONENT HERE */}
+<MobileMenu 
+    isOpen={isMenuOpen} 
+    onClose={() => setIsMenuOpen(false)} 
+    navLinks={navLinks} 
+/>
 
 
       <main>
@@ -513,15 +582,15 @@ const TypingText: React.FC<TypingTextProps> = ({
         <section className="relative h-screen w-full flex flex-col justify-center items-center mb-20 overflow-hidden">
           
           <div className="absolute inset-0 pointer-events-none z-0" 
-               style={{ 
-                 backgroundImage: `linear-gradient(to right, #ffffff30 1px, transparent 1px), linear-gradient(to bottom, #ffffff30 1px, transparent 1px)`,
-                 backgroundSize: '4rem 4rem',
-                 maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
-               }}
+                style={{ 
+                  backgroundImage: `linear-gradient(to right, #ffffff30 1px, transparent 1px), linear-gradient(to bottom, #ffffff30 1px, transparent 1px)`,
+                  backgroundSize: '4rem 4rem',
+                  maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
+                }}
           ></div>
 
           <div className="relative z-10 flex flex-col items-center text-center px-4">
-             {/* FLOATING NAME SECTION */}
+              {/* FLOATING NAME SECTION */}
 <motion.div
   initial={{ y: 0 }}
   animate={{ y: [-10, 10, -10] }} // Floating effect: Up 10px, Down 10px
@@ -548,21 +617,21 @@ const TypingText: React.FC<TypingTextProps> = ({
   delayStart={1.5}
 />
 
-             {/* Subtitle with Floating Animation */}
-             <motion.div
-                 initial={{ y: 0 }}
-                 animate={{
-                     y: [-5, 5, -5],
-                     transition: {
-                         delay: 3.5, 
-                         duration: 4, 
-                         repeat: Infinity,
-                         ease: "easeInOut"
-                     }
-                 }}
-             >
-                 
-             </motion.div>
+              {/* Subtitle with Floating Animation */}
+              <motion.div
+                  initial={{ y: 0 }}
+                  animate={{
+                      y: [-5, 5, -5],
+                      transition: {
+                          delay: 3.5, 
+                          duration: 4, 
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                      }
+                  }}
+              >
+                  
+              </motion.div>
 
           </div>
         </section>
@@ -570,97 +639,97 @@ const TypingText: React.FC<TypingTextProps> = ({
         <section className="relative px-4 md:px-6">
             {sections.map((section, index) => (
                 <StickyCard 
-                   key={index} 
-                   title={section.title} 
-                   index={index} 
-                   total={sections.length}
+                    key={index} 
+                    title={section.title} 
+                    index={index} 
+                    total={sections.length}
                 >
-                   {section.content}
+                    {section.content}
                 </StickyCard>
             ))}
         </section>
 
         {/* --- NEW SECTION: 'STILL HAVE QUESTIONS?' + RIGHT AI BOX (UPDATED) --- */}
         <section className="w-full py-16 md:py-24">
-             <div className="max-w-[95%] mx-auto border-t border-b border-white/20">
-                 <div className="flex flex-col md:flex-row h-auto md:h-64">
+              <div className="max-w-[95%] mx-auto border-t border-b border-white/20">
+                  <div className="flex flex-col md:flex-row h-auto md:h-64">
                     
                     {/* LEFT SIDE: "Still have questions?" */}
                     <div className="flex-[2] border-b md:border-b-0 md:border-r border-white/20 p-8 md:p-12 flex flex-col justify-center">
-                       <h5 className="text-lg md:text-5xl font-black uppercase tracking-tighter leading-none mb-4" style={{ color: CUSTOM_COLOR }}>
-  Still have<br />Questions?
+                       <h5 className="text-xl md:text-5xl font-black uppercase tracking-tighter leading-none mb-4" style={{ color: CUSTOM_COLOR }}>
+    Still have<br />Questions?
 </h5>
 
-                        <p className="text-lg text-gray-400 font-light max-w-md">
-                           Feel free to reach out. I'm always open to discussing new projects, creative ideas or opportunities.
-                        </p>
+                         <p className="text-lg text-gray-400 font-light max-w-md">
+                            Feel free to reach out. I'm always open to discussing new projects, creative ideas or opportunities.
+                         </p>
                     </div>
 
                     {/* RIGHT BOX: "ASK AI" (Opens /ai page) - NOW WHITE BACKGROUND */}
                     <a 
-                       href="/ai" 
-                       className="group flex-1 bg-white transition-all duration-500 cursor-pointer relative overflow-hidden flex flex-col items-center justify-center p-8"
+                        href="/ai" 
+                        className="group flex-1 bg-white transition-all duration-500 cursor-pointer relative overflow-hidden flex flex-col items-center justify-center p-8"
                     >
-                        <div className="relative z-10 text-center">
-                            
+                         <div className="relative z-10 text-center">
+                             
                              <h3 className="text-3xl font-bold uppercase tracking-widest text-black group-hover:scale-110 transition-transform duration-300">
                                  Ask AI
                              </h3>
                              <p className="mt-2 text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-black transition-colors">
                                  Chat with my Digital Twin
                              </p>
-                        </div>
+                         </div>
 
-                        {/* Corner Arrow - Dark for white background */}
-                        <div className="absolute top-6 right-6 text-2xl text-black/30 group-hover:text-black group-hover:rotate-45 transition-all duration-300">
-                            ↗
-                        </div>
+                         {/* Corner Arrow - Dark for white background */}
+                         <div className="absolute top-6 right-6 text-2xl text-black/30 group-hover:text-black group-hover:rotate-45 transition-all duration-300">
+                             ↗
+                         </div>
                     </a>
 
-                 </div>
-             </div>
+                  </div>
+              </div>
         </section>
 
         {/* CONNECT SECTION (KEPT AS REQUESTED) */}
         <section className="py-24 flex flex-col justify-center items-center text-center max-w-7xl mx-auto px-6">
           <p className="mb-10 max-w-2xl text-xl text-gray-400">Ready to build something amazing?</p>
-         <a
-          href={`mailto:${EMAIL_ADDRESS}`}
-          className="group relative inline-flex items-center gap-4"
-        >
-          <h2
-            className="
-              font-extrabold 
-              text-white 
-              tracking-tight 
-              text-6xl md:text-8xl 
-              transition-opacity 
-              duration-300
-            "
-          >
-            LET'S CONNECT!
-          </h2>
+           <a
+           href={`mailto:${EMAIL_ADDRESS}`}
+           className="group relative inline-flex items-center gap-4"
+         >
+           <h2
+             className="
+               font-extrabold 
+               text-white 
+               tracking-tight 
+               text-6xl md:text-8xl 
+               transition-opacity 
+               duration-300
+             "
+           >
+             LET'S CONNECT!
+           </h2>
 
-          <span className="text-white text-6xl md:text-8xl transition-transform duration-300 group-hover:translate-x-2">
-            ↗
-          </span>
+           <span className="text-white text-6xl md:text-8xl transition-transform duration-300 group-hover:translate-x-2">
+             ↗
+           </span>
 
-          <span
-            className="
-              absolute 
-              left-0 
-              bottom-0 
-              w-full 
-              h-[4px] 
-              bg-white 
-              scale-x-0 
-              group-hover:scale-x-100 
-              transition-transform 
-              duration-300 
-              origin-left
-            "
-          ></span>
-        </a>
+           <span
+             className="
+               absolute 
+               left-0 
+               bottom-0 
+               w-full 
+               h-[4px] 
+               bg-white 
+               scale-x-0 
+               group-hover:scale-x-100 
+               transition-transform 
+               duration-300 
+               origin-left
+             "
+           ></span>
+         </a>
 
         </section>
 
@@ -673,25 +742,25 @@ const TypingText: React.FC<TypingTextProps> = ({
         </div>
 
         <div className="marquee-container w-full md:w-1/3 mb-4 md:mb-0 overflow-hidden relative">
-           <div className="marquee-content whitespace-nowrap">
-             <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-             <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-             <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-             <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
-           </div>
-           <style jsx>{`
-             .marquee-container {
-               mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-             }
-             .marquee-content {
-               display: inline-block;
-               animation: marquee 20s linear infinite;
-             }
-             @keyframes marquee {
-               0% { transform: translateX(0%); }
-               100% { transform: translateX(-100%); }
-             }
-           `}</style>
+            <div className="marquee-content whitespace-nowrap">
+              <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+              <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+              <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+              <span className="mx-4">नमस्ते مرحبا HELLO HOLA</span>
+            </div>
+            <style jsx>{`
+              .marquee-container {
+                mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+              }
+              .marquee-content {
+                display: inline-block;
+                animation: marquee 20s linear infinite;
+              }
+              @keyframes marquee {
+                0% { transform: translateX(0%); }
+                100% { transform: translateX(-100%); }
+              }
+            `}</style>
         </div>
 
         <div className="flex gap-4 text-lg w-full md:w-auto justify-center md:justify-end">
@@ -706,7 +775,7 @@ const TypingText: React.FC<TypingTextProps> = ({
 
           <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
           <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
-          <a href="CV.pdf" className="hover:opacity-100 transition-opacity"><FiFileText /></a>
+          <a href="/CV.pdf" className="hover:opacity-100 transition-opacity"><FiFileText /></a>
         </div>
       </footer>
     </div>
