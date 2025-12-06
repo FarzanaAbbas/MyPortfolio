@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 
 import { motion } from 'framer-motion';
-import { Head } from 'next/document';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import GlowCursor from './GlowCursor';
