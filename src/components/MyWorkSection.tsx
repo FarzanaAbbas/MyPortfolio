@@ -8,6 +8,7 @@ import {
   AnimatePresence,
   motion,
 } from 'framer-motion';
+import Head from 'next/head';
 // @ts-ignore: Next.js handles this import, but TypeScript might flag it outside a module.
 import { useRouter } from 'next/router';
 import {
@@ -276,7 +277,11 @@ export default function MyWorkPage() {
      <div className="min-h-screen flex flex-col bg-black">
     <motion.div className="min-h-screen bg-black pt-32 pb-10 px-6 md:px-12 flex items-center relative">
         <GlowCursor/>
-    
+      {/* --- FIX END --- */}
+      <Head>
+        <title>Farzana Abbas</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
         {/* --- NAVBAR --- */}
         {!isLoading && (
           <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center bg-[#0a0a0a] backdrop-blur-md shadow-lg border-b border-white/10">
@@ -401,7 +406,14 @@ export default function MyWorkPage() {
         
                   <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
                   <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
-                  <a href="/CV.pdf" className="hover:opacity-100 transition-opacity"><FiFileText /></a>
+                 <a
+  href="/CV.pdf"  // <--- ADD THE SLASH HERE
+  target="_blank" // <--- ADD THIS to open in new tab
+  rel="noopener noreferrer"
+  className="hover:opacity-100 transition-opacity"
+>
+  <FiFileText />
+</a>
                 </div>
               </footer>
               </div>

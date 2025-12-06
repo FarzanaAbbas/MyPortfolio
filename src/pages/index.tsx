@@ -775,7 +775,14 @@ const TypingText: React.FC<TypingTextProps> = ({
 
           <a href="https://github.com/FarzanaAbbas/" className="hover:opacity-100 transition-opacity"><FaGithub /></a>
           <a href="#" className="hover:opacity-100 transition-opacity"><FaInstagram /></a>
-          <a href="/CV.pdf" className="hover:opacity-100 transition-opacity"><FiFileText /></a>
+        <a
+  href="/CV.pdf"  // <--- ADD THE SLASH HERE
+  target="_blank" // <--- ADD THIS to open in new tab
+  rel="noopener noreferrer"
+  className="hover:opacity-100 transition-opacity"
+>
+  <FiFileText />
+</a>
         </div>
       </footer>
     </div>

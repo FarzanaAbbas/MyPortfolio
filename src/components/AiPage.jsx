@@ -107,6 +107,12 @@ export default function AiPage() {
             className="min-h-screen bg-[#0a0a0a] pt-32 pb-10 px-6 md:px-12 font-mono flex flex-col"
         >
             <GlowCursor/>
+
+              {/* --- FIX END --- */}
+                  <Head>
+                    <title>Farzana Abbas</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                  </Head>
             {/* Navbar (Visual Only - Logic handled by parent) */}
             <nav className="fixed w-full z-50 top-0 left-0 px-6 py-6 flex justify-between items-center mix-blend-difference pointer-events-none">
                 <div className="text-xl font-bold uppercase tracking-widest invisible">Farzana.</div>
