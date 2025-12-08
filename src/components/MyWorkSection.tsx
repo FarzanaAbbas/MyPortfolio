@@ -103,10 +103,9 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
 
   return (
     <motion.div
-      // FIXED: mb-8 ensures separation between cards in the stack
-  className={`relative w-full mb-10 md:mb-0 min-h-[320px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
-${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
-
+      // FIXED: Added mb-8 for mobile spacing and standard height
+      className={`relative w-full mb-8 md:mb-0 h-[400px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
+      ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
       onMouseEnter={() => setActiveIndex(index)}
       onClick={() => setActiveIndex(index)}
     >
@@ -254,8 +253,7 @@ export default function MyWorkPage() {
   }, [activeIndex]);
 
   return (
-    <div className="min-h-screen bg-black pt-28 md:pt-40 pb-16 px-4 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
->
+    <div className="min-h-screen flex flex-col bg-black overflow-x-hidden">
       
       {/* --- PRELOADER --- */}
       <AnimatePresence mode="wait">
@@ -299,12 +297,12 @@ export default function MyWorkPage() {
       </AnimatePresence>
 
       {/* --- CONTENT WRAPPER --- */}
-      {/* FIX 1: pt-40 (HUGE top padding to forcefully push "MY WORKS" down) */}
+      {/* FIX 1: pt-16 (Reduced top padding so content starts higher) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="min-h-screen bg-black pt-40 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
+        className="min-h-screen bg-black pt-16 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
       >
         <GlowCursor />
         <Head>
@@ -327,11 +325,11 @@ export default function MyWorkPage() {
 
         <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} navLinks={navLinks} />
 
-        {/* FIX 2: gap-20 (BIG GAP forces cards down) */}
-        <div className="max-w-[1600px] mx-auto w-full flex flex-col md:flex-row h-auto md:h-full gap-20 md:gap-40">
+        <div className="max-w-[1600px] mx-auto w-full flex flex-col md:flex-row h-auto md:h-full gap-0 md:gap-40">
 
-          {/* LEFT TEXT */}
-          <div className="md:w-1/4 flex flex-col justify-center items-start z-10">
+          {/* LEFT TEXT - FIX 2: Minimized vertical space on mobile */}
+          <div className="md:w-1/4 flex flex-col justify-center items-start z-10 mb-2 md:mb-0">
+            {/* FIX 3: Smaller text-3xl on mobile to save space */}
             <h1 className="text-3xl md:text-7xl font-black mb-2 text-[#e0e0e0]">
               MY<br /><span style={{ color: CUSTOM_COLOR }}>WORKS.</span>
             </h1>
@@ -349,13 +347,11 @@ export default function MyWorkPage() {
             </div>
           </div>
 
-          {/* RIGHT GALLERY - No extra margins needed here because we used gap-20 in the parent */}
-         <div className="w-full md:w-3/4 min-h-[450px] md:h-full flex flex-col md:flex-row items-start md:items-center overflow-visible md:overflow-hidden pb-32 md:pb-0" ref={containerRef}>
-
+          {/* RIGHT GALLERY - FIX 4: mt-12 forces the cards down, away from the text */}
+          <div className="w-full md:w-3/4 h-auto md:h-full flex flex-col md:flex-row items-start md:items-center overflow-visible md:overflow-hidden pb-24 md:pb-0 mt-12 md:mt-0" ref={containerRef}>
             <motion.div
               ref={trackRef}
-           className="flex flex-col md:flex-row gap-6 min-h-[360px] md:h-[500px] w-full md:w-max px-0 md:px-4 items-center select-none"
-
+              className="flex flex-col md:flex-row gap-4 h-auto md:h-[500px] w-full md:w-max px-0 md:px-4 items-center select-none"
               // Disable drag on mobile to allow natural page scrolling
               drag={isDesktop ? "x" : false}
               dragConstraints={{ right: 0, left: -dragConstraint }}
