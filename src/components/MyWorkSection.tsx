@@ -103,8 +103,8 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
 
   return (
     <motion.div
-      // FIXED: Added mb-8 for mobile spacing and standard height
-      className={`relative w-full mb-8 md:mb-0 h-[400px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
+      // FIXED: Adjusted height and margin for better mobile spacing
+      className={`relative w-full mb-10 md:mb-0 h-[400px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
       ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
       onMouseEnter={() => setActiveIndex(index)}
       onClick={() => setActiveIndex(index)}
@@ -131,12 +131,14 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
 
       <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/90 ${isActive ? "opacity-100" : "opacity-60"}`} />
 
+      {/* Vertical Text */}
       <div className={`absolute inset-0 flex items-center justify-center ${isActive ? "opacity-0" : "opacity-100"}`}>
         <h3 className="text-white font-bold text-lg tracking-widest uppercase whitespace-nowrap -rotate-90 mix-blend-overlay">
           {project.title.split(" ")[0]}
         </h3>
       </div>
 
+      {/* Content at Bottom */}
       <div className={`absolute bottom-0 left-0 w-full p-6 transition-all ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
         <h3 className="text-2xl md:text-3xl font-black uppercase mb-3" style={{ color: CUSTOM_COLOR }}>
           {project.title}
@@ -297,12 +299,12 @@ export default function MyWorkPage() {
       </AnimatePresence>
 
       {/* --- CONTENT WRAPPER --- */}
-      {/* FIX 1: pt-16 (Reduced top padding so content starts higher) */}
+      {/* FIX 1: pt-20 (Reduced top padding to move everything up) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="min-h-screen bg-black pt-16 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
+        className="min-h-screen bg-black pt-20 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
       >
         <GlowCursor />
         <Head>
@@ -327,28 +329,29 @@ export default function MyWorkPage() {
 
         <div className="max-w-[1600px] mx-auto w-full flex flex-col md:flex-row h-auto md:h-full gap-0 md:gap-40">
 
-          {/* LEFT TEXT - FIX 2: Minimized vertical space on mobile */}
-          <div className="md:w-1/4 flex flex-col justify-center items-start z-10 mb-2 md:mb-0">
-            {/* FIX 3: Smaller text-3xl on mobile to save space */}
-            <h1 className="text-3xl md:text-7xl font-black mb-2 text-[#e0e0e0]">
+          {/* LEFT TEXT */}
+          {/* FIX 2: Reduced bottom margin on mobile to tighten up text section */}
+          <div className="md:w-1/4 flex flex-col justify-center items-start z-10 mb-8 md:mb-0">
+            {/* FIX 3: Reduced Text Size on mobile (text-4xl) to take less space */}
+            <h1 className="text-4xl md:text-7xl font-black mb-4 text-[#e0e0e0]">
               MY<br /><span style={{ color: CUSTOM_COLOR }}>WORKS.</span>
             </h1>
 
-            <p className="text-sm md:text-lg text-gray-400 mb-4">
+            <p className="text-base md:text-lg text-gray-400 mb-6">
               Explore the intersection of creativity and code: a collection of my best projects.
             </p>
 
             <div className="flex gap-4 items-center">
-              <span className="text-3xl md:text-4xl font-bold" style={{ color: CUSTOM_COLOR }}>
+              <span className="text-4xl font-bold" style={{ color: CUSTOM_COLOR }}>
                 {activeIndex !== null ? `0${activeIndex + 1}` : "--"}
               </span>
-              <div className="h-[2px] w-8 md:w-12 bg-[#333]" />
-              <span className="text-[10px] md:text-xs font-mono text-gray-500">/ 0{projectsData.length}</span>
+              <div className="h-[2px] w-12 bg-[#333]" />
+              <span className="text-xs font-mono text-gray-500">/ 0{projectsData.length}</span>
             </div>
           </div>
 
-          {/* RIGHT GALLERY - FIX 4: mt-12 forces the cards down, away from the text */}
-          <div className="w-full md:w-3/4 h-auto md:h-full flex flex-col md:flex-row items-start md:items-center overflow-visible md:overflow-hidden pb-24 md:pb-0 mt-12 md:mt-0" ref={containerRef}>
+          {/* RIGHT GALLERY - FIX 4: Added mt-4 to push cards down slightly from text */}
+          <div className="w-full md:w-3/4 h-auto md:h-full flex flex-col md:flex-row items-start md:items-center overflow-visible md:overflow-hidden pb-24 md:pb-0 mt-4 md:mt-0" ref={containerRef}>
             <motion.div
               ref={trackRef}
               className="flex flex-col md:flex-row gap-4 h-auto md:h-[500px] w-full md:w-max px-0 md:px-4 items-center select-none"
