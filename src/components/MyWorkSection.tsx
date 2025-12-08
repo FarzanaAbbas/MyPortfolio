@@ -104,7 +104,8 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
   return (
     <motion.div
       // FIXED: Adjusted height and margin for better mobile spacing
-      className={`relative w-full mb-10 md:mb-0 h-[400px] md:h-[500px] flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
+      className={`relative w-full mb-10 md:mb-0 h-[260px] sm:h-[300px] md:h-[500px]
+ flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
       ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
       onMouseEnter={() => setActiveIndex(index)}
       onClick={() => setActiveIndex(index)}
@@ -116,14 +117,15 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity duration-500"
+          className="absolute inset-0 w-full h-full object-cover object-top opacity-60 hover:opacity-100 transition-opacity duration-500"
+
         />
       ) : (
         project.image && (
           <img
             src={project.image}
             alt={project.title}
-            className="absolute inset-0 w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity duration-500"
+           className="absolute inset-0 w-full h-full object-cover object-top opacity-60 hover:opacity-100 transition-opacity duration-500"
             draggable="false"
           />
         )
@@ -304,7 +306,7 @@ export default function MyWorkPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="min-h-screen bg-black pt-20 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
+        className="min-h-screen bg-black pt-[130px] md:pt-24 pb-10 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center relative"
       >
         <GlowCursor />
         <Head>
