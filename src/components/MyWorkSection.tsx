@@ -104,9 +104,12 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
   return (
     <motion.div
       // FIXED: Adjusted height and margin for better mobile spacing
-      className={`relative w-full mb-10 md:mb-0 h-[260px] sm:h-[300px] md:h-[500px]
- flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
-      ${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
+    className={`relative w-full mb-10 md:mb-0 
+h-[85vh] sm:h-[90vh] md:h-[500px]
+flex-shrink-0 cursor-grab active:cursor-grabbing overflow-hidden 
+border-white/10 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] 
+${isActive ? "md:w-[450px]" : "md:w-[120px]"}`}
+
       onMouseEnter={() => setActiveIndex(index)}
       onClick={() => setActiveIndex(index)}
     >
@@ -117,7 +120,8 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-top opacity-60 hover:opacity-100 transition-opacity duration-500"
+       className="absolute inset-0 w-full h-full object-contain bg-black opacity-80 hover:opacity-100 transition-opacity duration-500"
+
 
         />
       ) : (
@@ -125,7 +129,8 @@ const ProjectStrip: React.FC<ProjectStripProps> = ({ project, index, activeIndex
           <img
             src={project.image}
             alt={project.title}
-           className="absolute inset-0 w-full h-full object-cover object-top opacity-60 hover:opacity-100 transition-opacity duration-500"
+          className="absolute inset-0 w-full h-full object-contain bg-black opacity-80 hover:opacity-100 transition-opacity duration-500"
+
             draggable="false"
           />
         )
@@ -356,7 +361,7 @@ export default function MyWorkPage() {
           <div className="w-full md:w-3/4 h-auto md:h-full flex flex-col md:flex-row items-start md:items-center overflow-visible md:overflow-hidden pb-24 md:pb-0 mt-4 md:mt-0" ref={containerRef}>
             <motion.div
               ref={trackRef}
-              className="flex flex-col md:flex-row gap-4 h-auto md:h-[500px] w-full md:w-max px-0 md:px-4 items-center select-none"
+              className="flex flex-col md:flex-row gap-6 h-auto md:h-[500px] w-full md:w-max px-0 md:px-4 items-center select-none"
               // Disable drag on mobile to allow natural page scrolling
               drag={isDesktop ? "x" : false}
               dragConstraints={{ right: 0, left: -dragConstraint }}
