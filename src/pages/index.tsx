@@ -363,8 +363,11 @@ const TypingText: React.FC<TypingTextProps> = ({
     </div>
     {/* --- FIX END --- */}
       <Head>
-        <title>Farzana Abbas</title>
-        
+        <title>Farzana Abbas | Creative Developer</title>
+        <meta 
+      name="description" 
+      content="MERN Stack and Next.js portfolio of Farzana Abbas. Specialized in building dynamic, high-performance web applications with a focus on creative UI/UX." 
+    />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
