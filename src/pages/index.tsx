@@ -364,7 +364,7 @@ const TypingText: React.FC<TypingTextProps> = ({
     {/* --- FIX END --- */}
       <Head>
         <title>Farzana Abbas</title>
-       
+        
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 

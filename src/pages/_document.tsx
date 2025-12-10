@@ -10,8 +10,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
            <meta name="google-site-verification" content="RvyIddRCrCZzl4NajhpQaw2PeC6p639d223cby_ADms" />
-
-     
+           
         </Head>
     
       <body className="antialiased">
